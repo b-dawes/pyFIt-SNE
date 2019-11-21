@@ -19,60 +19,37 @@ keywords=["tSNE", "embedding"]
 description="Fast Fourier Transform-accelerated Interpolation-based t-SNE (FIt-SNE)"
 license="BSD3"
 
-#Try...except because for some OS X setups, the compilation fails without -stdlib=libc++
-try: 
-    if platform == "darwin":
-        extensions = [Extension("fitsne.cppwrap",
-                                ["fitsne/cppwrap.pyx", "fitsne/src/nbodyfft.cpp", "fitsne/src/sptree.cpp", "fitsne/src/tsne.cpp"],
-                                language="c++",
-                                extra_compile_args=["-std=c++11", "-O3", '-pthread', "-lfftw3", "-lm"],
-                                extra_link_args=['-lfftw3', '-lm',"-mmacosx-version-min=10.9"])]
-    else:
-        extensions = [Extension("fitsne.cppwrap",
-                                ["fitsne/cppwrap.pyx", "fitsne/src/nbodyfft.cpp", "fitsne/src/sptree.cpp", "fitsne/src/tsne.cpp"],
-                                language="c++",
-                                extra_compile_args=["-O3", '-pthread', "-lfftw3", "-lm"],
-                                extra_link_args=['-lfftw3', '-lm'])]
-    extensions = cythonize(extensions, language="c++",  include_path=[])
 
-    # package_data = {}
-    __version__ = "0.0.0"
-    exec(open('fitsne/_version.py').read())
-
-    setup(name="fitsne",
-          version=__version__,
-          packages=find_packages(),
-          install_requires=['numpy', 'cython'],
-          ext_modules=extensions,
-          # package_data=package_data,
-          # metadata
-          author=author, 
-          author_email=author_email, 
-          url=url,
-          download_url=download_url,
-          keywords=keywords,
-          description=description, 
-          long_description=long_description,
-          license=license) 
-
-except:
+if platform == "darwin":
     extensions = [Extension("fitsne.cppwrap",
                             ["fitsne/cppwrap.pyx", "fitsne/src/nbodyfft.cpp", "fitsne/src/sptree.cpp", "fitsne/src/tsne.cpp"],
                             language="c++",
-                            extra_compile_args=["-std=c++11","-stdlib=libc++", "-O3", '-pthread', "-lfftw3", "-lm"],
+                            extra_compile_args=["-std=c++11", "-O3", '-pthread', "-lfftw3", "-lm"],
+                            extra_link_args=['-lfftw3', '-lm',"-mmacosx-version-min=10.9"])]
+else:
+    extensions = [Extension("fitsne.cppwrap",
+                            ["fitsne/cppwrap.pyx", "fitsne/src/nbodyfft.cpp", "fitsne/src/sptree.cpp", "fitsne/src/tsne.cpp"],
+                            language="c++",
+                            extra_compile_args=["-O3", '-pthread', "-lfftw3", "-lm"],
                             extra_link_args=['-lfftw3', '-lm'])]
-    extensions = cythonize(extensions, language="c++",  include_path=[])
+extensions = cythonize(extensions, language="c++",  include_path=[])
 
-    setup(name="fitsne",
-          version=__version__,
-          packages=find_packages(),
-          install_requires=['numpy', 'cython'],
-          ext_modules=extensions,
-          author=author, 
-          author_email=author_email, 
-          url=url,
-          download_url=download_url,
-          keywords=keywords,
-          description=description, 
-          long_description=long_description,
-          license=license) 
+# package_data = {}
+__version__ = "0.0.0"
+exec(open('fitsne/_version.py').read())
+
+setup(name="fitsne",
+      version=__version__,
+      packages=find_packages(),
+      install_requires=['numpy', 'cython'],
+      ext_modules=extensions,
+      # package_data=package_data,
+      # metadata
+      author=author, 
+      author_email=author_email, 
+      url=url,
+      download_url=download_url,
+      keywords=keywords,
+      description=description, 
+      long_description=long_description,
+      license=license) 
