@@ -31,7 +31,7 @@ try:
         extensions = [Extension("fitsne.cppwrap",
                                 ["fitsne/cppwrap.pyx", "fitsne/src/nbodyfft.cpp", "fitsne/src/sptree.cpp", "fitsne/src/tsne.cpp"],
                                 language="c++",
-                                extra_compile_args=["-std=c++11", "-O3", '-pthread', "-lfftw3", "-lm"],
+                                extra_compile_args=["-O3", '-pthread', "-lfftw3", "-lm"],
                                 extra_link_args=['-lfftw3', '-lm'])]
     extensions = cythonize(extensions, language="c++",  include_path=[])
 
